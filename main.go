@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"path"
 	"strings"
 )
 
@@ -17,7 +18,13 @@ func main() {
 		log.Fatal("flag name is required")
 	}
 
-	fullDir := "modules/" + *moduleName
+	moduleDir := "./modules"
+
+	if err := os.Mkdir(moduleDir, os.ModePerm); err != nil {
+		log.Fatal(err)
+	}
+
+	fullDir := path.Join(moduleDir, *moduleName)
 
 	if err := os.Mkdir(fullDir, os.ModePerm); err != nil {
 		log.Fatal(err)
@@ -68,7 +75,7 @@ func generate(moduleName, kind, templatePath string) error {
 	newData := strings.ReplaceAll(string(data), "{{module_name}}", strings.Title(moduleName))
 	newData = strings.ReplaceAll(newData, "{{module_name_lower}}", strings.ToLower(moduleName))
 
-	filePath := fmt.Sprintf("modules/%s/%s.%s.go", moduleName, moduleName, kind)
+	filePath := fmt.Sprintf("./modules/%s/%s.%s.go", moduleName, moduleName, kind)
 
 	err = os.WriteFile(filePath, []byte(newData), 0644)
 	if err != nil {
