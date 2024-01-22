@@ -43,6 +43,10 @@ func main() {
 			Path: "template/module/module.go.template",
 		},
 		{
+			Kind: "controller",
+			Path: "template/module/controller.go.template",
+		},
+		{
 			Kind: "dto",
 			Path: "template/module/dto.go.template",
 		},
