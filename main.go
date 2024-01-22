@@ -1,12 +1,15 @@
 package main
 
 import (
+	_ "embed"
 	"flag"
 	"fmt"
 	"log"
 	"os"
 	"path"
 	"strings"
+
+	"github.com/FrameParadorn/firefin-cli/template"
 )
 
 func main() {
@@ -34,56 +37,52 @@ func main() {
 
 	type templateFile struct {
 		Kind string
-		Path string
+		Data string
 	}
 
 	templateFiles := []templateFile{
 		{
 			Kind: "module",
-			Path: "template/module/module.go.template",
+			Data: template.Module,
 		},
 		{
 			Kind: "controller",
-			Path: "template/module/controller.go.template",
+			Data: template.Controller,
 		},
 		{
 			Kind: "dto",
-			Path: "template/module/dto.go.template",
+			Data: template.Dto,
 		},
 		{
 			Kind: "service",
-			Path: "template/module/service.go.template",
+			Data: template.Service,
 		},
 		{
 			Kind: "repository",
-			Path: "template/module/repository.go.template",
+			Data: template.Repository,
 		},
 		{
 			Kind: "entity",
-			Path: "template/module/entity.go.template",
+			Data: template.Etity,
 		},
 	}
 
 	for _, file := range templateFiles {
-		if err := generate(*moduleName, file.Kind, file.Path); err != nil {
+		if err := generate(*moduleName, file.Kind, file.Data); err != nil {
 			panic(err)
 		}
 	}
 
 }
 
-func generate(moduleName, kind, templatePath string) error {
-	data, err := os.ReadFile(templatePath)
-	if err != nil {
-		return err
-	}
+func generate(moduleName, kind, data string) error {
 
 	newData := strings.ReplaceAll(string(data), "{{module_name}}", strings.Title(moduleName))
 	newData = strings.ReplaceAll(newData, "{{module_name_lower}}", strings.ToLower(moduleName))
 
 	filePath := fmt.Sprintf("./modules/%s/%s.%s.go", moduleName, moduleName, kind)
 
-	err = os.WriteFile(filePath, []byte(newData), 0644)
+	err := os.WriteFile(filePath, []byte(newData), 0644)
 	if err != nil {
 		return err
 	}
