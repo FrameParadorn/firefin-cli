@@ -21,7 +21,9 @@ func main() {
 	moduleDir := "./modules"
 
 	if err := os.Mkdir(moduleDir, os.ModePerm); err != nil {
-		log.Fatal(err)
+		if !strings.Contains(err.Error(), "file exists") {
+			log.Fatal(err)
+		}
 	}
 
 	fullDir := path.Join(moduleDir, *moduleName)
