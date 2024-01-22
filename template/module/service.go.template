@@ -1,0 +1,22 @@
+package {{module_name_lower}}
+
+import (
+	"gorm.io/gorm"
+)
+
+type Service struct {
+	db         *gorm.DB
+	repository *Repositry
+}
+
+func NewService(db *gorm.DB) *Service {
+	return &Service{
+		db:         db,
+		repository: NewReposiry(db),
+	}
+}
+
+func (s *Service) Create(request *{{module_name}}CreateRequestDto) error {
+	{{module_name_lower}} := &{{module_name}}Entity{}
+	return s.db.Create({{module_name_lower}}).Error
+}

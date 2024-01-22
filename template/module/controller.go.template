@@ -1,0 +1,32 @@
+package {{module_name_lower}}
+
+import (
+	_ "github.com/FrameParadorn/foodfin-backend/infrastructure/validate"
+	"github.com/gofiber/fiber/v2"
+)
+
+type Controller struct {
+	service *Service
+}
+
+func NewController(app *fiber.App) *Controller {
+	controller := new(Controller)
+
+	// Router
+	// Ex.
+	// app.Get("/users", c.FindAll)
+
+	return controller
+}
+
+func (c *Controller) FindAll(ctx *fiber.Ctx) error {
+
+	// Handler logic here
+
+	// Ex.
+	// var request UserCreateRequestDto
+	// if err := validate.ValidateWithBodyParser(ctx, &request); err != nil {
+	// 	return err
+	// }
+	// return c.service.Create(&request)
+}

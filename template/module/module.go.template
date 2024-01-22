@@ -1,0 +1,18 @@
+package {{module_name_lower}}
+
+import (
+	"github.com/gofiber/fiber/v2"
+	"gorm.io/gorm"
+)
+
+type {{module_name}}Module struct {
+	controller *Controller
+	service    *Service
+}
+
+func NewModule(app *fiber.App, db *gorm.DB) *{{module_name}}Module {
+	return &{{module_name}}Module{
+		controller: NewController(app),
+		service:    NewService(db),
+	}
+}

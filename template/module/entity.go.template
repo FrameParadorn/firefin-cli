@@ -1,0 +1,8 @@
+package {{module_name_lower}} 
+
+type {{module_name}}Entity struct {
+}
+
+func (e *{{module_name}}Entity) TableName() string {
+	return "{{module_name_lower}}"
+}

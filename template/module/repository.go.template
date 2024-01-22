@@ -1,0 +1,13 @@
+package {{module_name_lower}}
+
+import "gorm.io/gorm"
+
+type Repositry struct {
+	db *gorm.DB
+}
+
+func NewReposiry(db *gorm.DB) *Repositry {
+	return &Repositry{
+		db: db,
+	}
+}

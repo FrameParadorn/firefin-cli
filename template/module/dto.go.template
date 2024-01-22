@@ -1,0 +1,4 @@
+package {{module_name_lower}}
+
+type {{module_name}}CreateRequestDto struct {
+}
