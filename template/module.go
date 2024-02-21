@@ -20,16 +20,17 @@ func NewController(module *{{module_name}}Module) *Controller {
 	// Router
 	// app.Get("/users", c.FindAll)
 	route := controller.module.app.Group("/api/v1/{{module_name_lower}}")
+	route.Get("/", controller.List)
 
-	return controller
+	return &controller
 }
 
-func (c *Controller) FindAll(ctx *fiber.Ctx) error {
+func (c *Controller) List(ctx *fiber.Ctx) error {
 
 	// Handler logic here
 
 	// Ex.
-	// var request UserCreateRequestDto
+	// var request CreateRequestDto
 	// if err := validate.ValidateWithBodyParser(ctx, &request); err != nil {
 	// 	return err
 	// }
@@ -122,16 +123,16 @@ func NewService(module *{{module_name}}Module) *Service {
 	}
 }
 
-func (s *Service) Create(request *dto.CreateRequestDto) (*{{module_name}}Entity, error) {
+func (s *Service) Create(request *CreateRequestDto) (*{{module_name}}Entity, error) {
 
 	{{module_name_lower}} := {{module_name}}Entity{}
 
-	copier.Copy(&{{module_name_lower}}, request)
+	//copier.Copy(&{{module_name_lower}}, request)
 
-	result := s.module.db.Create(&{{module_name_lower}})
-	if result.Error != nil {
-		return nil, result.Error
-	}
+	//result := s.module.db.Create(&{{module_name_lower}})
+	//if result.Error != nil {
+	//	return nil, result.Error
+	//}
 
 	return &{{module_name_lower}}, nil
 
