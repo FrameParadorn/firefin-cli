@@ -43,7 +43,7 @@ func (c *Controller) List(ctx *fiber.Ctx) error {
 var Dto string = `
 package {{module_name_lower}}
 
-type {{module_name}}CreateRequestDto struct {
+type CreateRequestDto struct {
 }
 `
 
@@ -96,12 +96,12 @@ package {{module_name_lower}}
 import "gorm.io/gorm"
 
 type Repositry struct {
-	db *gorm.DB
+	module *{{module_name}}Module
 }
 
-func NewReposiry(db *gorm.DB) *Repositry {
+func NewReposiry(module *{{module_name}}Module) *Repositry {
 	return &Repositry{
-		db: db,
+		module: module,
 	}
 }
 `
