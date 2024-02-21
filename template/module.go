@@ -93,8 +93,6 @@ func NewModule(app *fiber.App, db *gorm.DB) any {
 var Repository string = `
 package {{module_name_lower}}
 
-import "gorm.io/gorm"
-
 type Repositry struct {
 	module *{{module_name}}Module
 }
@@ -108,10 +106,6 @@ func NewReposiry(module *{{module_name}}Module) *Repositry {
 
 var Service string = `
 package {{module_name_lower}}
-
-import (
-	"gorm.io/gorm"
-)
 
 type Service struct {
 	module *{{module_name}}Module
