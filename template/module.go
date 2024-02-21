@@ -9,15 +9,17 @@ import (
 )
 
 type Controller struct {
-	service *Service
+	module *{{module_name}}Module
 }
 
-func NewController(app *fiber.App) *Controller {
-	controller := new(Controller)
+func NewController(module *{{module_name}}Module) *Controller {
+	controller := Controller{
+		module: module,
+	}
 
 	// Router
-	// Ex.
 	// app.Get("/users", c.FindAll)
+	route := controller.module.app.Group("/api/v1/{{module_name_lower}}")
 
 	return controller
 }
@@ -32,6 +34,8 @@ func (c *Controller) FindAll(ctx *fiber.Ctx) error {
 	// 	return err
 	// }
 	// return c.service.Create(&request)
+
+	return nil
 }
 `
 
@@ -62,16 +66,27 @@ import (
 )
 
 type {{module_name}}Module struct {
+	app        *fiber.App
+	db         *gorm.DB
 	controller *Controller
 	service    *Service
+	repositry  *Repositry
 }
 
-func NewModule(app *fiber.App, db *gorm.DB) *{{module_name}}Module {
-	return &{{module_name}}Module{
-		controller: NewController(app),
-		service:    NewService(db),
+func NewModule(app *fiber.App, db *gorm.DB) any {
+	module := {{module_name}}Module{
+		app: app,
+		db:  db,
 	}
+	module.repositry = NewReposiry(&module)
+	module.service = NewService(&module)
+	module.controller = NewController(&module)
+
+	db.AutoMigrate(&{{module_name}}Entity{})
+
+	return &module
 }
+
 `
 
 var Repository string = `
@@ -98,20 +113,28 @@ import (
 )
 
 type Service struct {
-	db         *gorm.DB
-	repository *Repositry
+	module *{{module_name}}Module
 }
 
-func NewService(db *gorm.DB) *Service {
+func NewService(module *{{module_name}}Module) *Service {
 	return &Service{
-		db:         db,
-		repository: NewReposiry(db),
+		module: module,
 	}
 }
 
-func (s *Service) Create(request *{{module_name}}CreateRequestDto) error {
-	{{module_name_lower}} := &{{module_name}}Entity{}
-	return s.db.Create({{module_name_lower}}).Error
+func (s *Service) Create(request *dto.CreateRequestDto) (*{{module_name}}Entity, error) {
+
+	{{module_name_lower}} := {{module_name}}Entity{}
+
+	copier.Copy(&{{module_name_lower}}, request)
+
+	result := s.module.db.Create(&{{module_name_lower}})
+	if result.Error != nil {
+		return nil, result.Error
+	}
+
+	return &{{module_name_lower}}, nil
+
 }
 
 `
